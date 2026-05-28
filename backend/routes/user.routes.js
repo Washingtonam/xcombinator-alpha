@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/user.controller');
+const { getProfile } = require('../controllers/user.controller');
+const { protect } = require('../middleware/authMiddleware');
 
-router.get('/profile', userController.getProfile);
+// Now, only authenticated users can access this route
+router.get('/profile', protect, getProfile);
 
 module.exports = router;
