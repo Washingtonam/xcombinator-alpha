@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
+import Signup from './pages/Signup'; // Ensure you created this file in src/pages/Signup.jsx
 
 export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-2xl">Xcombinator Frontend</h1>
+    <div className="min-h-screen">
+      <Signup />
     </div>
-  )
+  );
 }
