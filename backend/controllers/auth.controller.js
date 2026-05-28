@@ -1,4 +1,4 @@
-const User = require('../models/User'); // Use the exact filename case
+const User = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 
 exports.register = async (req, res) => {
