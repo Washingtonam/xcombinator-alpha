@@ -57,13 +57,6 @@ app.post(
 
 app.get('/healthz', (req, res) => res.status(200).json({ status: 'ok' }));
 
-if (process.env.NODE_ENV === 'production') {
-  const staticPath = path.join(__dirname, '..', 'frontend', 'dist');
-  app.use(express.static(staticPath));
-  app.get('*', (_, res) => {
-    res.sendFile(path.join(staticPath, 'index.html'));
-  });
-}
 
 app.use(errorHandler);
 
