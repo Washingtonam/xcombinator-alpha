@@ -9,17 +9,13 @@ const WalletSchema = new mongoose.Schema(
   { _id: false }
 );
 
-const UserSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true, select: false },
-    wallet: { type: WalletSchema, default: () => ({}) },
-    roles: { type: [String], default: ['user'] },
-    createdAt: { type: Date, default: Date.now },
-  },
-  { timestamps: true }
-);
+const userSchema = new mongoose.Schema({
+    fullName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    balance: { type: Number, default: 0 },
+    role: { type: String, default: 'user' }
+}, { timestamps: true });
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
