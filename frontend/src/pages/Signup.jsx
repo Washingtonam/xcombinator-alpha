@@ -31,8 +31,8 @@ const Signup = () => {
         if (formData.password.length < 8) return alert("Password must be 8+ chars.");
 
         try {
-            // This URL points to your Render backend
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/register`, formData);
+            const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const response = await axios.post(`${apiBase}/api/users/register`, formData);
             
             alert("Account created successfully!");
             console.log(response.data);

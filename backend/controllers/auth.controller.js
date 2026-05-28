@@ -4,24 +4,22 @@ const bcrypt = require('bcryptjs');
 exports.register = async (req, res) => {
     try {
         const { nin, fullName, phone, email, password } = req.body;
-        
-        // 1. Check if user already exists (by Email OR NIN)
+
+        if (!nin || !fullName || !phone || !email || !password) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
         const userExists = await User.findOne({ $or: [{ email }, { nin }] });
         if (userExists) {
             return res.status(400).json({ message: 'User with this Email or NIN already exists' });
         }
 
-        // 2. Hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // 3. Create new user
         const newUser = await User.create({ 
             nin, 
             fullName, 
             phone, 
             email, 
-            password: hashedPassword 
+            password 
         });
 
         res.status(201).json({ 
@@ -29,6 +27,9 @@ exports.register = async (req, res) => {
             user: { id: newUser._id, fullName: newUser.fullName } 
         });
     } catch (err) {
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ message: err.message });
+        }
         res.status(500).json({ message: 'Server error: ' + err.message });
     }
 };
