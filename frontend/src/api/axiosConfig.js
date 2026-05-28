@@ -9,7 +9,7 @@ if (!API_BASE) {
 }
 
 const api = axios.create({
-  baseURL: API_BASE || 'https://xcombinator-alpha.onrender.com/api',
+  baseURL: API_BASE || 'https://xcombinator-alpha.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
