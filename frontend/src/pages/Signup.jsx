@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, User, Mail, Phone, Hash, Lock } from 'lucide-react';
+import axios from 'axios'; // Import axios
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,22 +23,23 @@ const Signup = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Final Validation Check
-    if (formData.nin.length !== 11) {
-      alert("NIN must be exactly 11 digits.");
-      return;
-    }
-    if (formData.password.length < 8) {
-      alert("Password must be at least 8 characters long.");
-      return;
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // Validation
+        if (formData.nin.length !== 11) return alert("NIN must be 11 digits.");
+        if (formData.password.length < 8) return alert("Password must be 8+ chars.");
 
-    console.log('Valid Form Data:', formData);
-    // Proceed to API call
-  };
+        try {
+            // This URL points to your Render backend
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/register`, formData);
+            
+            alert("Account created successfully!");
+            console.log(response.data);
+        } catch (err) {
+            alert(err.response?.data?.message || "Registration failed");
+        }
+    };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
