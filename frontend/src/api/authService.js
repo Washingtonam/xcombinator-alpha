@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-// Ensure this matches your Render backend URL (e.g., https://your-app.onrender.com/api)
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Ensure this matches your Render backend URL (e.g., https://xcombinator-alpha.onrender.com/api)
+const API_URL = import.meta.env.VITE_API_URL || (typeof process !== 'undefined' ? process.env.REACT_APP_API_URL : undefined);
+if (!API_URL) {
+    throw new Error('VITE_API_URL or REACT_APP_API_URL must be defined in your environment variables');
+}
 
 const register = async (userData) => {
     const response = await axios.post(`${API_URL}/users/register`, userData);

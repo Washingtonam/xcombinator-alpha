@@ -31,13 +31,16 @@ const Signup = () => {
         if (formData.password.length < 8) return alert("Password must be 8+ chars.");
 
         try {
-            const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const apiBase = import.meta.env.VITE_API_URL || (typeof process !== 'undefined' ? process.env.REACT_APP_API_URL : undefined);
+            if (!apiBase) {
+                throw new Error('VITE_API_URL or REACT_APP_API_URL must be defined in your environment variables');
+            }
             const response = await axios.post(`${apiBase}/api/users/register`, formData);
             
             alert("Account created successfully!");
             console.log(response.data);
         } catch (err) {
-            alert(err.response?.data?.message || "Registration failed");
+            alert(err.response?.data?.message || err.message || "Registration failed");
         }
     };
 

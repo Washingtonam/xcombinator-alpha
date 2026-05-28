@@ -1,15 +1,13 @@
 import axios from 'axios';
 
-// Remove the local fallback. If VITE_API_URL is missing, it should fail 
-// so you know exactly why it isn't working, rather than trying to hit 'localhost'.
-const API_BASE = import.meta.env.VITE_API_URL; 
-
+// Ensure the API base URL is provided via environment variables.
+const API_BASE = import.meta.env.VITE_API_URL || (typeof process !== 'undefined' ? process.env.REACT_APP_API_URL : undefined);
 if (!API_BASE) {
-  console.error("CRITICAL: VITE_API_URL is not defined in your environment variables!");
+  throw new Error('CRITICAL: VITE_API_URL or REACT_APP_API_URL is not defined in your environment variables!');
 }
 
 const api = axios.create({
-  baseURL: API_BASE || 'https://xcombinator-alpha.onrender.com',
+  baseURL: API_BASE,
   headers: {
     'Content-Type': 'application/json',
   },
