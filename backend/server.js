@@ -22,9 +22,20 @@ if (process.env.NODE_ENV === 'production') {
 app.use(helmet());
 
 // 4. CORS Configuration
-// We explicitly allow your Vercel domain without trailing slashes to avoid header mismatch
+// Normalize the client URL so the origin header matches exactly.
+const normalizeOrigin = (value) => {
+  if (!value) return value;
+  return value.endsWith('/') ? value.slice(0, -1) : value;
+};
+const allowedOrigin = normalizeOrigin(process.env.CLIENT_URL) || 'https://xcombinator-alpha.vercel.app';
 const corsOptions = {
-  origin: process.env.CLIENT_URL || 'https://xcombinator-alpha.vercel.app',
+  origin: (origin, callback) => {
+    if (!origin || origin === allowedOrigin) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS origin denied: ${origin}`));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
